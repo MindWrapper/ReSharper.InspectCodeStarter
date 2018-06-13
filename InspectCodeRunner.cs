@@ -23,12 +23,18 @@ namespace RCLTStarter
                 { "o=|output=", "Files contains inspectcode's output. Default: $base-dir\\result.xml", v => m_OutPutFilePath = v }
             };
             m_InspectCodeOptions = options.Parse(args);
-            m_InspectCodeOptions.Add($"--caches-home={GetTemporaryDirectory()}");
+
+            if (string.IsNullOrEmpty(m_BaseDir))
+            {
+                throw new Exception("base-dir must be specified. Example: inspect c:\\temp\\classlib\\classlib.sln --base-dir=c:\\RCLTTest");
+            }
+
             if (string.IsNullOrEmpty(m_OutPutFilePath))
             {
                 m_OutPutFilePath = Path.Combine(m_BaseDir, "result.xml");
             }
             m_InspectCodeOptions.Add($"--output={m_OutPutFilePath}");
+            m_InspectCodeOptions.Add($"--caches-home={GetTemporaryDirectory()}");
             m_PluginsInstallDir = Path.Combine(m_BaseDir, "Plugins");
         }
 
