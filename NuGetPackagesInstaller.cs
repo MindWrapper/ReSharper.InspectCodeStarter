@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace RCLTStarter
 {
@@ -28,7 +30,8 @@ namespace RCLTStarter
             args.Add($"{packageInfo.Id} -version {packageInfo.Version}");
             args.Add($"-OutputDirectory \"{m_InstallDir}\"");
             args.Add("-ExcludeVersion");
-            Process.Start("nuget.exe", string.Join(" ", args))?.WaitForExit();
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Process.Start(Path.Combine(assemblyPath, "nuget.exe"), string.Join(" ", args))?.WaitForExit();
             return packageInfo.Id;
         }
     }
