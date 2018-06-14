@@ -26,8 +26,10 @@ namespace RCLTStarter
 
             if (string.IsNullOrEmpty(m_BaseDir))
             {
-                throw new Exception("base-dir must be specified. Example: inspect c:\\temp\\classlib\\classlib.sln --base-dir=c:\\RCLTTest");
+                m_BaseDir = Environment.CurrentDirectory;
             }
+
+            m_BaseDir = Path.GetFullPath(m_BaseDir);
 
             if (string.IsNullOrEmpty(m_OutPutFilePath))
             {
