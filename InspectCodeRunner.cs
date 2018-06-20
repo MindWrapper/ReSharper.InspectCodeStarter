@@ -105,8 +105,9 @@ namespace RCLTStarter
         private void SetupAdditionalDeployerPackagesEnvVar(List<string> installedPackages)
         {
             /*
-                Forms XML and writes it JET_ADDITIONAL_DEPLOYED_PACKAGES environment variable.
-                Each 'Folder' contains a path to an expanded nuget package
+               Forms XML and writes it `JET_ADDITIONAL_DEPLOYED_PACKAGES` environment variable.
+               Each 'Folder' contains a path to an expanded NuGet package
+
                 Example:
 
                 <Packages>
@@ -114,20 +115,18 @@ namespace RCLTStarter
                     <Folder Path="c:\RCLTTest\PowerToys.CyclomaticComplexity" />
                 </Packages>
 
-                See documention JetBrains.Application.Environment.AdditionalDeployedPackages.Schema
+                See documentation JetBrains.Application.Environment.AdditionalDeployedPackages.Schema
                 in 'JetBrains.ReSharper.CommandLineTools\tools\JetBrains.Platform.Shell.xml' 
 
-                Using 'Folder' was the only way I could make it work. It would have been possible to 
-                use 'File' element, but it would require to write code for downloading nupukg instead
-                of utilizing the full power of nuget. Other options, described in `JetBrains.Platform.Shell.xml` like DownloadId,
+                Using 'Folder' was the only way I could make it work. It is  possible to use 'File' element, 
+                but it requires writing code for downloading `nupukg` instead of utilizing the power of NuGet caching. 
+                Other options are described in `JetBrains.Platform.Shell.xml` like Download-Id.
 
-                Each 'Folder' contains and an expanded package content and a nupkg file. 
-                `inspectcode` ignores expanded package content, instead it picks up a nupkg  
-                and  expand it somewhere into  %LocalAppData%\JetBrains\Shared\vAny\DeployedPackagesExpand\
-
-                I would expect 'inspectcode' to use a package contents which aldready expanded to 'Folder', expanding nupkg again.
-                As it brings some small overhead. Left a request to fix it here https://github.com/JetBrains/resharper-unity/issues/536
-                When/if it is fixed, the overhead will disappear.
+               Each 'Folder' contains an expanded package content and a nupkg file. However,
+               `inspectcode` ignores expanded package content; instead, it picks up a nupkg and expands 
+               it somewhere into  [folder_name]. I would expect 'inspectcode' to use package content which already 
+               expanded to 'Folder'. I’ve left a request to fix it here https://github.com/JetBrains/resharper-unity/issues/536. 
+               When/if it is fixed, the overhead will disappear.
              */
             var doc = new XmlDocument();
             var packages = doc.CreateElement("Packages");
