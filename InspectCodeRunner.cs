@@ -17,6 +17,7 @@ namespace RCLTStarter
         List<string> m_InspectCodeOptions;
         const string k_SdkVersion = "2018.1.0";
         List<string> m_PluginsSpecifiedInCommandLine;
+        string m_CachesHome;
 
         public InspectCodeRunner(string[] args)
         {
@@ -41,9 +42,9 @@ namespace RCLTStarter
             }
             m_InspectCodeOptions.Add($"--output={m_OutPutFilePath}");
 
-            // Use unique location for cache, otherwise 'inspectcode' might not pickup
-            // newly installed plugins
-            m_InspectCodeOptions.Add($"--caches-home={GetTemporaryDirectory()}");
+            // Use unique location for cache, otherwise 'inspectcode' might not pickup newly installed plugins
+            m_CachesHome = GetTemporaryDirectory();
+            m_InspectCodeOptions.Add($"--caches-home={m_CachesHome}");
             m_PluginsInstallDir = Path.Combine(m_BaseDir, "Plugins");
         }
 
@@ -58,6 +59,14 @@ namespace RCLTStarter
             // Runs 'inspectcode.exe' on specified project or solution.
             // Look for comments inside 'SetupAdditionalDeployerPackagesEnvVar' for extra details
             RunInspectCode(codeAnalysisPlugins);
+
+            DeleteTemporaryCacheFolder();
+        }
+
+        void DeleteTemporaryCacheFolder()
+        {
+            Console.WriteLine($"Deleting temporary cache folder {m_CachesHome}");
+            Directory.Delete(m_CachesHome, true);
         }
 
         private void InstallReSharperCommandLineTools()
