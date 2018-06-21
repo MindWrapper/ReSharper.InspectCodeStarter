@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -91,7 +92,7 @@ namespace RCLTStarter
                 if (match.Success)
                 {
                     var version = match.Groups[0].Value;
-                    packages.Add(new PackageInfo { Id = p, Version = version });
+                    packages.Add(new PackageInfo { Id = p.Remove(p.LastIndexOf(version) - 1), Version = version });
                 }
                 else
                 {
